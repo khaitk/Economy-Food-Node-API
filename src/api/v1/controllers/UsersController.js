@@ -1,11 +1,11 @@
-const {User} = require('../models')
+const { User } = require('../models');
 
 exports.findOne = async (req, res) => {
-    try{
+    try {
         const users = await User.findAll();
         return res.json(users);
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        return res.status(500).json({err: "An error occured"});
+        return res.status(500).json({ err: 'An error occured' });
     }
-}
+};
