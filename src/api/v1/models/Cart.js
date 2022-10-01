@@ -1,12 +1,11 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Post extends Model {
+    class Cart extends Model {
         static associate({ User }) {
-            // define association here
             this.belongsTo(User, { foreignKey: 'userId', as: 'users' });
         }
     }
-    Post.init(
+    Cart.init(
         {
             id: {
                 allowNull: false,
@@ -18,17 +17,21 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 type: DataTypes.INTEGER,
             },
-            content: {
+            productId: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
+            },
+            quantity: {
                 type: DataTypes.STRING,
+                allowNull: false,
             },
         },
         {
             sequelize,
             //define table name
-            tableName: 'posts',
-            modelName: 'Post',
+            tableName: 'cart',
+            modelName: 'Cart',
         },
     );
-    return Post;
+    return Cart;
 };

@@ -1,11 +1,11 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class User extends Model {
-        static associate({ Profile }) {
-            this.hasOne(Profile, { foreignKey: 'userId', as: 'profile' });
+    class Product extends Model {
+        static associate({ Categorie }) {
+            this.belongsTo(Categorie, { foreignKey: 'categorieId', as: 'categorie' });
         }
     }
-    User.init(
+    Product.init(
         {
             id: {
                 allowNull: false,
@@ -13,25 +13,25 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 type: DataTypes.INTEGER,
             },
-            email: {
+            categorieId: {
+                allowNull: false,
+                type: DataTypes.INTEGER,
+            },
+            name: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
-                validate: {
-                    isEmail: { msg: 'It must be a valid Email  address' },
-                },
             },
-            password: {
-                type: DataTypes.STRING,
+            price: {
+                type: DataTypes.FLOAT,
                 allowNull: false,
             },
         },
         {
             sequelize,
             //define table name
-            tableName: 'users',
-            modelName: 'User',
+            tableName: 'product',
+            modelName: 'Product',
         },
     );
-    return User;
+    return Product;
 };
