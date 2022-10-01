@@ -1,5 +1,6 @@
 //import controllers
 const testController = require('../controllers/TestController')
+const userController = require('../controllers/UsersController')
 
 module.exports = function ( app ) {
     //khai báo router
@@ -8,6 +9,7 @@ module.exports = function ( app ) {
     })
 
     app.get('/get-test', testController.getTest )
+    app.get('/get-user', userController.findOne)
     //app.get( '/get-member/:memberCode', memberController.getMember )
     //app.post( '/sign-in', validate.validateLogin(), memberController.logIn )
 
