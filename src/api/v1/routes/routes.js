@@ -2,7 +2,7 @@
 const testController = require('../controllers/TestController');
 const userController = require('../controllers/UsersController');
 
-module.exports = function (app) {
+module.exports = function(app) {
     //khai báo router
     app.get('/', (req, res) => {
         res.send({ message: 'Khai TK - Node JS - MySQL - Docker' });
