@@ -1,6 +1,11 @@
-const User = require('../models/Users')
+const {User} = require('../models')
 
-exports.findOne = (req, res) => {
-    const user = User.findById(1)
-    console.log(user)
+exports.findOne = async (req, res) => {
+    try{
+        const users = await User.findAll();
+        return res.json(users);
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({err: "An error occured"});
+    }
 }
