@@ -9,10 +9,10 @@ module.exports = function(app) {
     });
 
     app.get('/get-test', testController.getTest);
-    app.get('/get-user', userController.findOne);
     //app.get( '/get-member/:memberCode', memberController.getMember )
     //app.post( '/sign-in', validate.validateLogin(), memberController.logIn )
 
     //create account
     app.post('/sign-in', userController.createAccount);
+    app.post('/login-in', userController.login);
 };
