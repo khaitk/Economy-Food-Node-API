@@ -6,6 +6,9 @@ const port       = process.env.PORT || 3000;
 app.use( bodyParser.urlencoded( {extended : true} ) );
 app.use( bodyParser.json() );
 
+const db = require('./src/api/v1/models');
+db.sequelize.sync();
+
 const routes = require( './src/api/v1/routes/routes' );
 routes( app );
 
