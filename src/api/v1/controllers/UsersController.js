@@ -3,7 +3,7 @@ const jsonwebtoken = require('jsonwebtoken');
 
 const { http, message } = require('../helpers');
 const { User, Profile } = require('../models');
-const { getProfile } = require('../repository/UserRepository');
+const { getProfile, updateProfile } = require('../repository/UserRepository');
 
 exports.createAccount = async (req, res) => {
     try {
@@ -67,6 +67,38 @@ exports.getProfile = async (req, res) => {
     try {
         const profile = await getProfile(req.user.id);
         return res.status(http.SUCCESS_CODE).send(profile);
+    } catch (err) {
+        return res.status(http.ERROR_EXCEPTION_CODE).json({
+            err: message.message.ERROR,
+        });
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+    try {
+        let dataProfile = {
+            name: null,
+            age: null,
+            phone: null,
+            address: null,
+        };
+        if (req.body.name) {
+            dataProfile['name'] = req.body.name;
+        }
+        if (req.body.age) {
+            dataProfile['age'] = req.body.age;
+        }
+        if (req.body.phone) {
+            dataProfile['phone'] = req.body.phone;
+        }
+        if (req.body.address) {
+            dataProfile['address'] = req.body.address;
+        }
+        const profile = await updateProfile(req.user.id, dataProfile);
+        return res.status(http.SUCCESS_CODE).send({
+            status: http.SUCCESS_CODE,
+            data: profile,
+        });
     } catch (err) {
         return res.status(http.ERROR_EXCEPTION_CODE).json({
             err: message.message.ERROR,
