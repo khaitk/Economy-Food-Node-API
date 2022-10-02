@@ -1,6 +1,8 @@
-const { User, Profile } = require('../models');
 const { genSaltSync, hashSync, bcrypt, compareSync } = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
+
+const { User, Profile } = require('../models');
+const { getProfile } = require('../repository/UserRepository');
 
 exports.createAccount = async (req, res) => {
     try {
@@ -56,7 +58,20 @@ exports.login = async (req, res) => {
         });
     } catch (err) {
         return res.status(500).json({
-            err: 'An error accured',
+            err: 'An error occured',
+        });
+    }
+};
+
+exports.getProfile = async (req, res) => {
+    try {
+        const profile = await getProfile(req.user.id);
+        return res.status(200).send({
+            data: profile,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            err: 'An error occured',
         });
     }
 };
