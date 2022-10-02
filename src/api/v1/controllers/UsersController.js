@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
         const addMlSeconds = 60 * 1000;
         const newDateObj = new Date(numberOfMlSeconds + addMlSeconds);
 
-        const jsonToken = jsonwebtoken.sign({ id: user.id }, 'secret', { expiresIn: '30s' });
+        const jsonToken = jsonwebtoken.sign({ id: user.id }, 'secret', { expiresIn: '3600s' });
         return res.status(200).send({
             token: jsonToken,
             expiresIn: newDateObj,
