@@ -13,7 +13,7 @@ exports.createAccount = async (req, res) => {
         const user = await User.findOne({ where: { email: email } });
 
         if (user) {
-            return res.status(http.AUTHENTICATION_FAIL_CODE).send({ message: 'Email này đã tồn tại' });
+            return res.status(http.AUTHENTICATION_FAIL_CODE).send({ message: message.message.EMAIL_EXISTS });
         }
         const users = await User.create({
             email: email,
@@ -24,7 +24,7 @@ exports.createAccount = async (req, res) => {
         });
         res.status(http.SUCCESS_CODE).send({
             status: http.SUCCESS_CODE,
-            message: 'Dã tạo thành công.',
+            message: message.message.CREATED,
         });
     } catch (err) {
         return res.status(http.ERROR_EXCEPTION_CODE).json({ err: message.message.ERROR });
@@ -39,11 +39,11 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ where: { email: email } });
 
         if (!user) {
-            return res.status(http.AUTHENTICATION_FAIL_CODE).send('Tên đăng nhập không tồn tại.');
+            return res.status(http.AUTHENTICATION_FAIL_CODE).send(message.message.EMAIL_EXISTS);
         }
         const isPasswordValid = compareSync(password, user.password);
         if (!isPasswordValid) {
-            return res.status(http.AUTHENTICATION_FAIL_CODE).send('Mật khẩu không chính xác.');
+            return res.status(http.AUTHENTICATION_FAIL_CODE).send(message.message.INCORRECT_PASSWORD);
         }
 
         const currentDateObj = new Date();
