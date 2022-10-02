@@ -1,8 +1,8 @@
 module.exports = {
-    HOST: 'localhost',
-    USER: 'root',
-    PASSWORD: '',
-    DB: 'shop-economy',
+    HOST: process.env.MYSQLDB_LOCAL,
+    USER: process.env.MYSQLDB_USER,
+    PASSWORD: process.env.MYSQLDB_ROOT_PASSWORD,
+    DB: process.env.MYSQLDB_DATABASE,
     dialect: 'mysql',
     pool: {
         max: 5,
@@ -10,4 +10,6 @@ module.exports = {
         acquire: 30000,
         idle: 10000,
     },
+    SECRET: process.env.SECRET,
+    JWT_EXPIRES_IN: process.env.EXPIRES_IN,
 };
