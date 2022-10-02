@@ -7,6 +7,11 @@ exports.createAccount = async (req, res) => {
         const email = req.body.email;
         const salt = genSaltSync(10);
         const password = hashSync(req.body.password, salt);
+        const user = await User.findOne({ where: { email: email } });
+
+        if (user) {
+            return res.status(403).send({ message: 'Email này đã tồn tại' });
+        }
         const users = await User.create({
             email: email,
             password: password,
@@ -44,7 +49,7 @@ exports.login = async (req, res) => {
         const addMlSeconds = 60 * 1000;
         const newDateObj = new Date(numberOfMlSeconds + addMlSeconds);
 
-        const jsonToken = jsonwebtoken.sign({ id: user.id }, 'secret', { expiresIn: '5m' });
+        const jsonToken = jsonwebtoken.sign({ id: user.id }, 'secret', { expiresIn: '30s' });
         return res.status(200).send({
             token: jsonToken,
             expiresIn: newDateObj,
