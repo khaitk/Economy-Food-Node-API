@@ -10,4 +10,6 @@ module.exports = {
         acquire: 30000,
         idle: 10000,
     },
+    SECRET: process.env.SECRET,
+    JWT_EXPIRES_IN: process.env.EXPIRES_IN,
 };

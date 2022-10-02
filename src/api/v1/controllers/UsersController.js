@@ -1,6 +1,7 @@
 const { genSaltSync, hashSync, bcrypt, compareSync } = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 
+const { http, message } = require('../helpers');
 const { User, Profile } = require('../models');
 const { getProfile } = require('../repository/UserRepository');
 
@@ -12,7 +13,7 @@ exports.createAccount = async (req, res) => {
         const user = await User.findOne({ where: { email: email } });
 
         if (user) {
-            return res.status(403).send({ message: 'Email này đã tồn tại' });
+            return res.status(http.AUTHENTICATION_FAIL_CODE).send({ message: 'Email này đã tồn tại' });
         }
         const users = await User.create({
             email: email,
@@ -21,13 +22,12 @@ exports.createAccount = async (req, res) => {
         const profile = await Profile.create({
             userId: users.id,
         });
-        res.status(201).send({
-            status: 201,
+        res.status(http.SUCCESS_CODE).send({
+            status: http.SUCCESS_CODE,
             message: 'Dã tạo thành công.',
         });
     } catch (err) {
-        console.log(err);
-        return res.status(500).json({ err: 'An error occured' });
+        return res.status(http.ERROR_EXCEPTION_CODE).json({ err: message.message.ERROR });
     }
 };
 
@@ -35,15 +35,15 @@ exports.login = async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        console.log(email, password);
+
         const user = await User.findOne({ where: { email: email } });
 
         if (!user) {
-            return res.status(401).send('Tên đăng nhập không tồn tại.');
+            return res.status(http.AUTHENTICATION_FAIL_CODE).send('Tên đăng nhập không tồn tại.');
         }
         const isPasswordValid = compareSync(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).send('Mật khẩu không chính xác.');
+            return res.status(http.AUTHENTICATION_FAIL_CODE).send('Mật khẩu không chính xác.');
         }
 
         const currentDateObj = new Date();
@@ -52,13 +52,13 @@ exports.login = async (req, res) => {
         const newDateObj = new Date(numberOfMlSeconds + addMlSeconds);
 
         const jsonToken = jsonwebtoken.sign({ id: user.id }, 'secret', { expiresIn: '3600s' });
-        return res.status(200).send({
+        return res.status(http.SUCCESS_CODE).send({
             token: jsonToken,
             expiresIn: newDateObj,
         });
     } catch (err) {
-        return res.status(500).json({
-            err: 'An error occured',
+        return res.status(http.ERROR_EXCEPTION_CODE).json({
+            err: message.message.ERROR,
         });
     }
 };
@@ -66,12 +66,10 @@ exports.login = async (req, res) => {
 exports.getProfile = async (req, res) => {
     try {
         const profile = await getProfile(req.user.id);
-        return res.status(200).send({
-            data: profile,
-        });
+        return res.status(http.SUCCESS_CODE).send(profile);
     } catch (err) {
-        return res.status(500).json({
-            err: 'An error occured',
+        return res.status(http.ERROR_EXCEPTION_CODE).json({
+            err: message.message.ERROR,
         });
     }
 };
